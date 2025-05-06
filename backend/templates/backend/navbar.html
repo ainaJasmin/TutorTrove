@@ -1,0 +1,47 @@
+<style>
+  #hey-msg{
+    color: white;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'home' %}">TutorTrove</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Levels
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="{% url 'subjects' %}">Primary</a>
+              <a class="dropdown-item" href="{% url 'subjects' %}">Secondary</a>
+              <a class="dropdown-item" href="{% url 'subjects' %}">Tertiary</a>
+            </div>
+          </li>
+        {% if request.user.is_staff %}
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'tutors' %}">Tutors</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="#">Reviews</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contact</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+        </li>
+      </ul>
+    </div>
+
+    <span id="hey-msg">Hey, {{request.user}}</span>
+    <span><a id="hey-msg" href="{% url 'logout' %}">| Logout</a></span>
+  </nav>

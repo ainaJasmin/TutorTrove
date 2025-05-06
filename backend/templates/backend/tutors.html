@@ -1,0 +1,45 @@
+{% extends 'backend/base.html' %}
+
+{% block content %}
+
+<h1>Tutors </h1> 
+<br>
+
+<a class="btn btn-outline-primary" href="{% url 'create_TS' %}">Add Tutor-Subject</a>
+<br>
+<br>
+
+<div>
+    <table class = "table">
+        <tr>
+            <th>Profile</th>
+            <th>Tutor</th>
+            <th>Hours</th>
+            <th>Email</th>
+            <th>Phone No.</th>
+            <th>Joined</th>
+            <th>Subjects</th>
+            <th>Update</th>
+            <th>Remove</th>
+        </tr>
+
+        {% for i in tutor_subject %}
+        <tr>
+            <td><a class="btn btn-sm btn-info" href="{% url 'tutor' i.tutor.id %}">View</a></td>
+            <td>{{i.tutor}}</td>
+            <td>{{i.tutor.hours}}</td>
+            <td>{{i.tutor.email}}</td>
+            <td>{{i.tutor.phone}}</td>
+            <td>{{i.tutor.joined}}</td>
+            <td>{{i.subject |linebreaks}}</td>
+            <td><a class="btn btn-sm btn-info" href="{% url 'update_TS' i.id %}">Update</a></td>
+            <td><a class="btn btn-sm btn-danger" href="{% url 'delete_TS' i.id %}">Delete</a></td>
+        </tr>
+        {% endfor %}
+
+        
+
+    </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'backend/base.html' %}
+
+{% block content %}
+
+<h1>Subjects</h1>
+
+<div>
+    <table class="table">
+        <tr>
+            <th>Level</th>
+            <th>Subject</th>
+            <th>Exam Preparation</th>
+        </tr>
+
+        {% for i in subjects %}
+            <tr>
+                <td>{{i.level}}</td>
+                <td>{{i.subject_name}}</td>
+                <td>{{i.exam_prep}}</td>
+            </tr>
+        {% endfor %}
+        
+
+    </table>
+</div>
+
+{% endblock %}

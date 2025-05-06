@@ -1,0 +1,31 @@
+{% extends 'backend/base.html' %}
+
+{% block content %}
+
+<br>
+<h1>Tutor {{tutor.name}}</h1>
+<br>
+
+<p>Hours: {{tutor.hours}}</p>
+<p>Email: {{tutor.email}}</p>
+<p>Phone: {{tutor.phone}}</p>
+<p>Joined: {{tutor.joined}}</p>
+
+<div>
+    <table>
+        <tr>
+            <th>Subjects: </th>
+        </tr>
+
+        {% for i in tutorsubject %}
+
+        <tr>
+            <td>{{i.subject}}</td>
+        </tr>
+
+        {% endfor %}
+    </table>
+
+</div>
+
+{% endblock %}

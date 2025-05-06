@@ -1,0 +1,14 @@
+{% extends 'backend/base.html' %}
+
+{% block content %}
+
+<p>Are you sure you want to delete "{{TS}}"?</p>
+
+<form action="{% url 'delete_TS' TS.id %}" method="POST">
+    {% csrf_token %}
+    <a class="btn btn-sm btn-warning" href="{% url 'tutors' %}">Cancel</a>
+    <input class="btn btn-sm btn-danger" type="submit" name="Confirm">
+
+</form>
+
+{% endblock %}

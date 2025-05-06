@@ -1,0 +1,66 @@
+{% extends 'backend/base.html' %}
+
+{% block content %}
+
+<h1>Welcome back!</h1>
+<br>
+
+<!-- single page app: INVOICE -->
+<h4>Invoice Component</h4>
+<table class = "table">
+<tr>
+    <th>Tutor</th>
+    <th>No. of Tutees</th>
+    <th>Hrs</th>
+    <th>Total (£)</th>
+    <th>Paid</th>
+</tr>
+
+{% for i in tutee_hours %}
+    <tr>
+        <td>  
+            {% for j in i.name.tutor_subject.all %}
+            {{j}}
+            {% endfor %}
+        </td>
+        <td> {{i.name.tutor_subject.all.count}} </td>
+        <td> {{i.hours}} </td>
+        <td> {{i.subject.price}} </td>
+    </tr>
+{% endfor %}
+</table>
+
+
+<br>
+
+
+<!-- single page app: TUTEES -->
+<h4> Tutees Component </h4>
+<table class = "table">
+    <tr>
+        <th>Tutee</th>
+        <th>Tutor - Subject</th>
+        <th>Date Joined</th>
+        <th>Contact No.</th>
+        <th>Level</th> 
+    </tr>
+    
+    {% for i in tutee %}
+        <tr>
+            <td>{{i.name}}</td>
+            <td>
+                {% for j in i.tutor_subject.all %}
+                    {{j}}
+                    <br>
+                {% endfor %}
+            </td>
+            <td>{{i.joined}}</td>
+            <td>{{i.phone}}</td>
+            <td>{{i.level}}</td>
+        </tr>
+    {% endfor %}
+</table>    
+
+{% endblock %}
+
+

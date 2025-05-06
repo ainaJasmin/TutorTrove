@@ -1,0 +1,37 @@
+{% extends 'backend/base.html' %}
+
+{% block content %}
+
+<style>
+    .profile_img{
+        border-radius: 50%;
+        width: 60%;
+        height: 60%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 2em;
+    }
+</style>
+
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <div class="card text-white bg-info mb-3" class="card-body">
+                <a style="margin: 2em;" class="btn btn-warning" href="{% url 'home' %}">Home</a>
+                <h2 style="text-align: center;" class="card-title">Profile</h2>
+                <img class="profile_img" src="{{request.user.tutor.user_pic.url}}">    
+            </div>
+        </div>
+        <div class="col-8">
+            <form method="POST" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.as_p}}
+                <input class="btn btn-primary" type="submit" name="Update Profile">
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
