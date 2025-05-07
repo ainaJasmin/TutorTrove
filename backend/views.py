@@ -206,7 +206,7 @@ def getTutor(request, pk):
 @api_view(['PUT'])
 def updateTutor(request, pk):
     data = request.data
-    tutor = Tutor.object.get(id=pk)
+    tutor = Tutor.objects.get(id=pk)
     serializer = TutorSerializer(instance=tutor, data=data)
 
     if serializer.is_valid():
@@ -237,20 +237,31 @@ def get_csrf_token(request):
 
 def api_login(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        username = data.get('username')
-        password = data.get('password')
+        try:
+            data = json.loads(request.body)
+            username = data.get('username')
+            password = data.get('password')
 
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return JsonResponse({
-                'message': 'Login successful',
-                'is_superuser': user.is_superuser
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+
+                tutor_id = None
+                try:
+                    tutor = Tutor.objects.get(user=user)
+                    tutor_id = tutor.id
+                except Tutor.DoesNotExist:
+                    pass
+                
+                return JsonResponse({
+                    'message': 'Login successful',
+                    'is_superuser': user.is_superuser,
+                    'tutorId': tutor_id
                 })
-        
-        else:
-            return JsonResponse({'error': 'Invalid credentials'}, status=401)
+            else:
+                return JsonResponse({'error': 'Invalid credentials'}, status=401)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
     return JsonResponse({'error': 'Method not allowed'}, status=405)
 
@@ -290,6 +301,13 @@ def api_delete_tutor(request,pk):
 
 @api_view(['GET'])
 def getTutorSubject(request):
+    tutor_subject = TutorSubject.objects.all()
+    serializer = TutorSubjectSerializer(tutor_subject, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getTutorSubject_G(request):
     tutor_subject = TutorSubject.objects.all()
     serializer = TutorSubjectSerializer(tutor_subject, many=True)
     return Response(serializer.data)
@@ -484,4 +502,36 @@ def getLevels(request):
     return Response(serializer.data)
 
 
+@api_view(['POST'])
+def createTuteeHours(request):
+    tutee_id = request.data.get('tutee_id')
+    hours = request.data.get('hours')
+    subject_id = request.data.get('subject_id')
+    date = request.data.get('date', '')
 
+    tutee = Tutee.objects.get(id=tutee_id)
+    subject = Subject.objects.get(id=subject_id)
+    
+    tutee_hours = TuteeHours.objects.create(
+        tutee=Tutee.objects.get(id=tutee_id),
+        hours=hours,
+        subject=subject,
+        date=date
+    )
+        
+    serializer = TuteeHoursSerializer(tutee_hours)
+    return Response(serializer.data, status=201)
+
+@api_view(['GET'])
+def get_user_by_username(request, username):
+    try:
+        user = User.objects.get(username=username)
+        
+        tutor = Tutor.objects.get(user=user)
+        
+        serializer = TutorSerializer(tutor)
+        return Response(serializer.data)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'User not found'}, status=404)
+    except Tutor.DoesNotExist:
+        return JsonResponse({'error': 'Tutor profile not found'}, status=404)
